@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexlify</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: #fff;
+            background-color: #000;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 15px 50px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #00ffff;
+        }
+
+        ul.nav-tabs {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        ul.nav-tabs > li {
+            position: relative;
+        }
+
+        ul.nav-tabs > li > a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 10px;
+        }
+
+        ul.nav-tabs > li:hover .dropdown {
+            display: block;
+        }
+
+        .dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: rgba(0, 20, 40, 0.95);
+            min-width: 180px;
+            padding: 10px 0;
+            border-radius: 5px;
+        }
+
+        .dropdown li a {
+            color: #fff;
+            display: block;
+            padding: 8px 15px;
+        }
+
+        #search {
+            padding: 10px;
+            width: 200px;
+            border: 1px solid #00ffff;
+            border-radius: 25px;
+            background: transparent;
+            color: #fff;
+        }
+
+        #suggestions {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: #001122;
+            width: 200px;
+            border-radius: 5px;
+        }
+
+        #suggestions li {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        #contact-btn {
+            background: #00ffff;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* Hero Section */
+        #hero {
+            background-image: url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin-top: 70px;
+            color: #fff;
+        }
+
+        #hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        #hero h1 span {
+            color: #00ffff;
+        }
+
+        /* Second Section */
+        #second {
+            background: #fff;
+            color: #333;
+            padding: 80px 50px;
+            text-align: center;
+        }
+
+        #second h2 {
+            font-size: 36px;
+            color: #00aaaa;
+            margin-bottom: 30px;
+        }
+
+        #second p {
+            font-size: 18px;
+            line-height: 1.8;
+            max-width: 900px;
+            margin: 0 auto 30px;
+        }
+
+        /* Third Section - Simple Slider */
+        #third {
+            background: linear-gradient(135deg, #001122, #003344);
+            padding: 80px 50px;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        #third h2 {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 60px;
+            color: #00ffff;
+        }
+
+        .big-slider {
+            width: 100%;
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            margin-bottom: 80px;
+        }
+
+        .big-slides {
+            display: flex;
+            height: 100%;
+            transition: transform 0.8s ease;
+        }
+
+        .big-slide {
+            min-width: 100%;
+            height: 400px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .big-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .slide-overlay {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.7);
+            color: #fff;
+            padding: 15px 30px;
+            border-radius: 25px;
+            text-align: center;
+        }
+
+        .big-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .big-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #666;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .big-dot.active {
+            background: #00ffff;
+            transform: scale(1.2);
+        }
+
+        /* Reviews Section */
+        #reviews {
+            background: #001122;
+            padding: 80px 50px;
+            color: #fff;
+        }
+
+        #reviews h2 {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 60px;
+            color: #00ffff;
+        }
+
+        .reviews-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+            height: 200px;
+        }
+
+        .reviews-track {
+            display: flex;
+            transition: transform 0.8s ease;
+            height: 100%;
+        }
+
+        .review-card {
+            min-width: 300px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 0 15px;
+            text-align: center;
+            border: 1px solid rgba(0,255,255,0.2);
+        }
+
+        .review-card img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin-bottom: 15px;
+        }
+
+        .review-card h4 {
+            margin-bottom: 10px;
+            color: #00ffff;
+        }
+
+        .review-card p {
+            font-style: italic;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .review-stars {
+            color: #ffd700;
+            margin-top: 10px;
+            font-size: 20px;
+        }
+
+        /* Modal */
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 999;
+        }
+
+        #modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #001122;
+            padding: 40px;
+            border-radius: 15px;
+            width: 400px;
+            z-index: 1000;
+            border: 1px solid #00ffff;
+        }
+
+        #modal input, #modal select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid #00ffff;
+            border-radius: 5px;
+            color: #fff;
+        }
+
+        #done {
+            width: 100%;
+            padding: 12px;
+            background: #00ffff;
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        #thankyou {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #00ffff;
+            color: #000;
+            padding: 40px 60px;
+            border-radius: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            z-index: 1001;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav { flex-direction: column; gap: 15px; padding: 15px; }
+            #hero h1 { font-size: 32px; }
+            #second, #third, #reviews { padding: 50px 20px; }
+            .review-card { min-width: 250px; margin: 0 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">Nexlify</div>
+        <ul class="nav-tabs">
+            <li><a href="#">Who We Are ▼</a>
+                <ul class="dropdown">
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Team</a></li>
+                    <li><a href="#">Values</a></li>
+                    <li><a href="#">History</a></li>
+                </ul>
+            </li>
+            <li><a href="#">What We Do ▼</a>
+                <ul class="dropdown">
+                    <li><a href="#">Services</a></li>
+                    <li><a href="#">Solutions</a></li>
+                    <li><a href="#">Projects</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Industries ▼</a>
+                <ul class="dropdown">
+                    <li><a href="#">Technology</a></li>
+                    <li><a href="#">Healthcare</a></li>
+                    <li><a href="#">Finance</a></li>
+                    <li><a href="#">Manufacturing</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Insights ▼</a>
+                <ul class="dropdown">
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">News</a></li>
+                    <li><a href="#">Case Studies</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Investors</a></li>
+        </ul>
+        <div style="position: relative;">
+            <input type="text" id="search" placeholder="Search services...">
+            <ul id="suggestions">
+                <li>AI Solutions</li>
+                <li>Cloud Services</li>
+                <li>Cybersecurity</li>
+                <li>Data Analytics</li>
+                <li>Web Development</li>
+                <li>App Development</li>
+                <li>IoT Solutions</li>
+                <li>Blockchain</li>
+            </ul>
+        </div>
+        <button id="contact-btn">Contact Us</button>
+    </nav>
+
+    <section id="hero">
+        <div>
+            <h1>AT NEXLIFY, WE <br><span>EMBRACE INTELLIGENCE</span><br>— HUMAN & ARTIFICIAL</h1>
+            <p>A point of view by our leadership team</p>
+        </div>
+    </section>
+
+    <section id="second">
+        <h2>We Embrace Intelligence — Human and Artificial</h2>
+        <p>Everything we design, build, and maintain begins with understanding our customers' needs. We bring together engineering and domain excellence, human expertise, and artificial intelligence to create smarter products, plants, and networks.</p>
+        <p>With decades of experience solving complex problems across safety-critical environments, we understand that whilst technology expands what is possible, it is human and domain intelligence that provide direction and build trust.</p>
+    </section>
+
+    <section id="third">
+        <h2>Designing Tomorrow with Engineering Excellence</h2>
+        
+        <!-- Big Image Slider -->
+        <div class="big-slider">
+            <div class="big-slides">
+                <div class="big-slide" style="background-image: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+                    <div class="slide-overlay">
+                        <h3>AI & Machine Learning</h3>
+                        <p>Transforming businesses with intelligent solutions</p>
+                    </div>
+                </div>
+                <div class="big-slide" style="background-image: url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+                    <div class="slide-overlay">
+                        <h3>Cloud Computing</h3>
+                        <p>Scalable infrastructure for modern enterprises</p>
+                    </div>
+                </div>
+                <div class="big-slide" style="background-image: url('https://images.unsplash.com/photo-1461749280684-dccba630e2f6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+                    <div class="slide-overlay">
+                        <h3>Cybersecurity</h3>
+                        <p>Protecting your digital assets with advanced security</p>
+                    </div>
+                </div>
+                <div class="big-slide" style="background-image: url('https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+                    <div class="slide-overlay">
+                        <h3>Data Analytics</h3>
+                        <p>Unlock insights from your data with powerful analytics</p>
+                    </div>
+                </div>
+                <div class="big-slide" style="background-image: url('https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+                    <div class="slide-overlay">
+                        <h3>Digital Transformation</h3>
+                        <p>Modernize your business with cutting-edge technology</p>
+                    </div>
+                </div>
+                <div class="big-slide" style="background-image: url('https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+                    <div class="slide-overlay">
+                        <h3>IoT Solutions</h3>
+                        <p>Connecting devices and systems for smarter operations</p>
+                    </div>
+                </div>
+                <div class="big-slide" style="background-image: url('https://images.unsplash.com/photo-1517336714731-489689fd1ca8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+                    <div class="slide-overlay">
+                        <h3>Blockchain Technology</h3>
+                        <p>Secure, transparent, and decentralized solutions</p>
+                    </div>
+                </div>
+                <div class="big-slide" style="background-image: url('https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+                    <div class="slide-overlay">
+                        <h3>Web Development</h3>
+                        <p>Creating stunning and responsive web experiences</p>
+                    </div>
+                </div>
+                <div class="big-slide" style="background-image: url('https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+                    <div class="slide-overlay">
+                        <h3>Mobile Apps</h3>
+                        <p>Native and cross-platform mobile applications</p>
+                    </div>
+                </div>
+                <div class="big-slide" style="background-image: url('https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+                    <div class="slide-overlay">
+                        <h3>DevOps</h3>
+                        <p>Streamlining development and operations workflows</p>
+                    </div>
+                </div>
+                <div class="big-slide" style="background-image: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+                    <div class="slide-overlay">
+                        <h3>UI/UX Design</h3>
+                        <p>Crafting intuitive and beautiful user experiences</p>
+                    </div>
+                </div>
+                <div class="big-slide" style="background-image: url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+                    <div class="slide-overlay">
+                        <h3>Quality Assurance</h3>
+                        <p>Ensuring flawless performance and reliability</p>
+                    </div>
+                </div>
+                <div class="big-slide" style="background-image: url('https://images.unsplash.com/photo-1461749280684-dccba630e2f6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+                    <div class="slide-overlay">
+                        <h3>Consulting</h3>
+                        <p>Strategic technology consulting for business growth</p>
+                    </div>
+                </div>
+                <div class="big-slide" style="background-image: url('https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+                    <div class="slide-overlay">
+                        <h3>Training</h3>
+                        <p>Empowering teams with cutting-edge technology skills</p>
+                    </div>
+                </div>
+                <div class="big-slide" style="background-image: url('https://images.unsplash.com/photo-1517336714731-489689fd1ca8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+                    <div class="slide-overlay">
+                        <h3>Support</h3>
+                        <p>24/7 technical support and maintenance services</p>
+                    </div>
+                </div>
+            </div>
+            <div class="big-dots">
+                <span class="big-dot active" onclick="currentBigSlide(0)"></span>
+                <span class="big-dot" onclick="currentBigSlide(1)"></span>
+                <span class="big-dot" onclick="currentBigSlide(2)"></span>
+                <span class="big-dot" onclick="currentBigSlide(3)"></span>
+                <span class="big-dot" onclick="currentBigSlide(4)"></span>
+                <span class="big-dot" onclick="currentBigSlide(5)"></span>
+                <span class="big-dot" onclick="currentBigSlide(6)"></span>
+                <span class="big-dot" onclick="currentBigSlide(7)"></span>
+                <span class="big-dot" onclick="currentBigSlide(8)"></span>
+                <span class="big-dot" onclick="currentBigSlide(9)"></span>
+                <span class="big-dot" onclick="currentBigSlide(10)"></span>
+                <span class="big-dot" onclick="currentBigSlide(11)"></span>
+                <span class="big-dot" onclick="currentBigSlide(12)"></span>
+                <span class="big-dot" onclick="currentBigSlide(13)"></span>
+                <span class="big-dot" onclick="currentBigSlide(14)"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section id="reviews">
+        <h2>What Our Clients Say</h2>
+        <div class="reviews-container">
+            <div class="reviews-track">
+                <div class="review-card">
+                    <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="John Doe">
+                    <h4>John Doe</h4>
+                    <div class="review-stars">★★★★★</div>
+                    <p>"Nexlify transformed our business with their AI solutions. Their team delivered exceptional results and exceeded our expectations."</p>
+                </div>
+                <div class="review-card">
+                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Sarah Wilson">
+                    <h4>Sarah Wilson</h4>
+                    <div class="review-stars">★★★★★</div>
+                    <p>"The cloud migration was seamless. Nexlify's expertise helped us scale efficiently while maintaining top security standards."</p>
+                </div>
+                <div class="review-card">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Mike Johnson">
+                    <h4>Mike Johnson</h4>
+                    <div class="review-stars">★★★★★</div>
+                    <p>"Outstanding cybersecurity solutions! Their proactive approach prevented potential threats and gave us peace of mind."</p>
+                </div>
+                <div class="review-card">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Emily Chen">
+                    <h4>Emily Chen</h4>
+                    <div class="review-stars">★★★★★</div>
+                    <p>"Data analytics insights from Nexlify revolutionized our decision-making process. Highly recommend their services!"</p>
+                </div>
+                <div class="review-card">
+                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="David Smith">
+                    <h4>David Smith</h4>
+                    <div class="review-stars">★★★★★</div>
+                    <p>"The web development team created a stunning platform that perfectly represents our brand. Excellent collaboration!"</p>
+                </div>
+                <div class="review-card">
+                    <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Lisa Brown">
+                    <h4>Lisa Brown</h4>
+                    <div class="review-stars">★★★★★</div>
+                    <p>"Mobile app development was fast and flawless. Nexlify delivered a high-quality app that our users love."</p>
+                </div>
+                <div class="review-card">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Robert Lee">
+                    <h4>Robert Lee</h4>
+                    <div class="review-stars">★★★★★</div>
+                    <p>"IoT integration transformed our manufacturing process. Nexlify's technical expertise is truly impressive."</p>
+                </div>
+                <div class="review-card">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Anna Davis">
+                    <h4>Anna Davis</h4>
+                    <div class="review-stars">★★★★★</div>
+                    <p>"Blockchain implementation was smooth and secure. Nexlify helped us build trust with our customers."</p>
+                </div>
+                <div class="review-card">
+                    <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="James Wilson">
+                    <h4>James Wilson</h4>
+                    <div class="review-stars">★★★★★</div>
+                    <p>"Exceptional UI/UX design that perfectly captured our vision. The user engagement has skyrocketed!"</p>
+                </div>
+                <div class="review-card">
+                    <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Maria Garcia">
+                    <h4>Maria Garcia</h4>
+                    <div class="review-stars">★★★★★</div>
+                    <p>"Quality assurance services ensured our product was rock-solid. Nexlify's attention to detail is unmatched."</p>
+                </div>
+                <div class="review-card">
+                    <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Tom Anderson">
+                    <h4>Tom Anderson</h4>
+                    <div class="review-stars">★★★★★</div>
+                    <p>"Strategic consulting that aligned perfectly with our business goals. Nexlify is a true partner."</p>
+                </div>
+                <div class="review-card">
+                    <img src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Rachel Green">
+                    <h4>Rachel Green</h4>
+                    <div class="review-stars">★★★★★</div>
+                    <p>"Training programs were comprehensive and practical. Our team is now proficient in the latest technologies."</p>
+                </div>
+                <div class="review-card">
+                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Kevin Patel">
+                    <h4>Kevin Patel</h4>
+                    <div class="review-stars">★★★★★</div>
+                    <p>"24/7 support has been invaluable. Nexlify's response time and expertise are truly outstanding."</p>
+                </div>
+                <div class="review-card">
+                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Sophia Kim">
+                    <h4>Sophia Kim</h4>
+                    <div class="review-stars">★★★★★</div>
+                    <p>"DevOps implementation streamlined our entire development process. Highly professional team!"</p>
+                </div>
+                <div class="review-card">
+                    <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Michael Brown">
+                    <h4>Michael Brown</h4>
+                    <div class="review-stars">★★★★★</div>
+                    <p>"Digital transformation journey was smooth and successful. Nexlify delivered measurable results."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="overlay"></div>
+    <div id="modal">
+        <form id="contact-form">
+            <label>Full Name</label>
+            <input type="text" id="full-name" required>
+
+            <label>Date of Birth</label>
+            <input type="date" id="dob" required>
+
+            <label>Service</label>
+            <select id="service" required>
+                <option value="">Select Service</option>
+                <option>AI & Machine Learning</option>
+                <option>Cloud Computing</option>
+                <option>Cybersecurity</option>
+                <option>Data Analytics</option>
+                <option>Web Development</option>
+                <option>App Development</option>
+                <option>IoT Solutions</option>
+                <option>Blockchain</option>
+            </select>
+
+            <label>Email</label>
+            <input type="email" id="email" required>
+
+            <label>Password</label>
+            <input type="password" id="password" required>
+
+            <button type="button" id="done">Done</button>
+        </form>
+    </div>
+
+    <div id="thankyou">Thank You!</div>
+
+    <script>
+        // Search Functionality
+        const searchInput = document.getElementById('search');
+        const suggestions = document.getElementById('suggestions');
+
+        searchInput.addEventListener('focus', () => {
+            suggestions.style.display = 'block';
+        });
+
+        searchInput.addEventListener('blur', () => {
+            setTimeout(() => suggestions.style.display = 'none', 200);
+        });
+
+        suggestions.addEventListener('click', (e) => {
+            if (e.target.tagName === 'LI') {
+                searchInput.value = e.target.textContent;
+                suggestions.style.display = 'none';
+            }
+        });
+
+        // Modal Functionality
+        const contactBtn = document.getElementById('contact-btn');
+        const modal = document.getElementById('modal');
+        const overlay = document.getElementById('overlay');
+        const doneBtn = document.getElementById('done');
+        const thankyou = document.getElementById('thankyou');
+        const form = document.getElementById('contact-form');
+
+        contactBtn.addEventListener('click', () => {
+            modal.style.display = 'block';
+            overlay.style.display = 'block';
+        });
+
+        overlay.addEventListener('click', () => {
+            modal.style.display = 'none';
+            overlay.style.display = 'none';
+            form.reset();
+        });
+
+        doneBtn.addEventListener('click', () => {
+            const email = document.getElementById('email').value;
+            if (!email.includes('@')) {
+                alert('Email must contain @');
+                return;
+            }
+            modal.style.display = 'none';
+            thankyou.style.display = 'block';
+            setTimeout(() => {
+                thankyou.style.display = 'none';
+                overlay.style.display = 'none';
+                form.reset();
+            }, 3000);
+        });
+
+        // Big Slider - 15 Images
+        let bigSlideIndex = 0;
+        const bigSlides = document.querySelector('.big-slides');
+        const bigDots = document.querySelectorAll('.big-dot');
+        const totalBigSlides = 15;
+
+        function showBigSlide(index) {
+            bigSlideIndex = index;
+            bigSlides.style.transform = `translateX(-${index * 100}%)`;
+            bigDots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+        }
+
+        function nextBigSlide() {
+            bigSlideIndex = (bigSlideIndex + 1) % totalBigSlides;
+            showBigSlide(bigSlideIndex);
+        }
+
+        // Auto slide every 4 seconds
+        setInterval(nextBigSlide, 4000);
+
+        // Manual dot click
+        bigDots.forEach((dot, index) => {
+            dot.addEventListener('click', () => showBigSlide(index));
+        });
+
+        showBigSlide(0);
+
+        // Reviews Slider
+        let reviewIndex = 0;
+        const reviewsTrack = document.querySelector('.reviews-track');
+        const totalReviews = 15;
+        const reviewWidth = 330; // 300px card + 30px margin
+
+        function showReviews(index) {
+            reviewIndex = index;
+            reviewsTrack.style.transform = `translateX(-${index * reviewWidth}px)`;
+        }
+
+        function nextReview() {
+            reviewIndex = (reviewIndex + 1) % totalReviews;
+            showReviews(reviewIndex);
+        }
+
+        // Auto slide every 5 seconds
+        setInterval(nextReview, 5000);
+
+        showReviews(0);
+    </script>
+
+</body>
+</html>
